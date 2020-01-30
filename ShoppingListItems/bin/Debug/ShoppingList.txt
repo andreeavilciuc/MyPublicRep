@@ -1,0 +1,5 @@
+Bread | 1
+Coffee | 2
+Sugar | 3
+Butter | 5
+Milk | 1

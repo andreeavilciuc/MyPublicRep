@@ -1,0 +1,6 @@
+D:\Programming\Session12\ShoppingListItems\bin\Debug\ShoppingListItems.exe.config
+D:\Programming\Session12\ShoppingListItems\bin\Debug\ShoppingListItems.exe
+D:\Programming\Session12\ShoppingListItems\bin\Debug\ShoppingListItems.pdb
+D:\Programming\Session12\ShoppingListItems\obj\Debug\ShoppingListItems.csprojAssemblyReference.cache
+D:\Programming\Session12\ShoppingListItems\obj\Debug\ShoppingListItems.exe
+D:\Programming\Session12\ShoppingListItems\obj\Debug\ShoppingListItems.pdb
