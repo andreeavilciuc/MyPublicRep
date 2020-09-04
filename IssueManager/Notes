@@ -1,0 +1,44 @@
+User - Create ticket, edit ticket, delete ticket, view own tickets
+Agent - Create ticket, edit priority on open or own tickets, close ticket, change agent for ticket, view all open unassigned tickets, view own tickets 
+Admin - view all tickets, edit ticket, close ticket, delete ticket, view diagrams, asign roles
+
+TICKET
+int ID
+Datetime Submition date
+Enum Status - new, in work, closed
+Int Submitter ID
+virtual User submitter
+Int Agent ID
+virtual User Agent
+Enum priority
+string subject
+string Content
+Attachements
+
+optional: List of changes
+
+CHANGE
+int ID
+int Ticket ID
+Datetime Date
+String Comment
+User Agent
+
+
+USER:
+int ID
+string Name
+string Surname
+String E-mail address
+Enum Role (User, Agent, Admin)
+
+DATABASE tables:
+Tickets
+Changes
+Users
+
+design pattern
+nice ui 
+database
+security - authorisation and authentification, using auth0
+solves a business problem
