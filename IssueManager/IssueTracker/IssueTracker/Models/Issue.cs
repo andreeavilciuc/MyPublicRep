@@ -35,7 +35,7 @@ public enum IssuePriority
         [StringLength(300, MinimumLength = 3)]
         public string Content { get; set; }
         public virtual ApplicationUser Submitter { get; set; }
-        public virtual ApplicationUser Agent { get; set; }
+        public virtual ApplicationUser LastModifiedBy { get; set; }
 
         private ICollection<Comment> comments;
         public virtual ICollection<Comment> Comments

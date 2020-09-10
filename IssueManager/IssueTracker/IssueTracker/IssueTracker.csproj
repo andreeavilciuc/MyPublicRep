@@ -217,6 +217,10 @@
     <Compile Include="Migrations\202009100625477_addAgentToModel.designer.cs">
       <DependentUpon>202009100625477_addAgentToModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009101122117_changedModel.cs" />
+    <Compile Include="Migrations\202009101122117_changedModel.designer.cs">
+      <DependentUpon>202009101122117_changedModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -327,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009100625477_addAgentToModel.resx">
       <DependentUpon>202009100625477_addAgentToModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009101122117_changedModel.resx">
+      <DependentUpon>202009101122117_changedModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

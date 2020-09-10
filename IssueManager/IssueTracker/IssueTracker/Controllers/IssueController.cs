@@ -25,7 +25,7 @@ namespace IssueTracker.Controllers
         // GET: Issue
         public ActionResult Index()
         {
-             var currentUser = manager.FindById(User.Identity.GetUserId());
+            var currentUser = manager.FindById(User.Identity.GetUserId());
             return View(db.Issues.ToList().Where(issue => issue.Submitter.Id == currentUser.Id));
         }
 
@@ -58,7 +58,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            if(issue.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID,"User"))
+            if (issue.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID, "User"))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
@@ -75,7 +75,7 @@ namespace IssueTracker.Controllers
         // POST: Issue/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Priority, Subject, Content")] Issue issue)
@@ -95,6 +95,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Issue/Edit/5
+
         public ActionResult Edit(int? id)
         {
             var currentUserID = User.Identity.GetUserId();
@@ -122,11 +123,25 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id)
         {
+            var currentUserID = User.Identity.GetUserId();
+            var currentUser = manager.FindById(currentUserID);
+
+            var userStore = new UserStore<ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var issueToUpdate = db.Issues.Find(id);
+
+            if (issueToUpdate.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID, "User"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            issueToUpdate.LastModifiedBy = currentUser;
+
             if (TryUpdateModel(issueToUpdate, ""))
             {
                 try
@@ -160,7 +175,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            if (issue.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID, "User"))
+            if (issue.Submitter.Id != currentUserID && !userManager.IsInRole(currentUserID, "Admin"))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
@@ -173,6 +188,7 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             Issue issue = db.Issues.Find(id);
             db.Issues.Remove(issue);
             db.SaveChanges();
