@@ -35,21 +35,21 @@
 
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var PasswordHash = new PasswordHasher();
-            if (!context.Users.Any(u => u.UserName == "admin@andreea.com"))
+            if (!context.Users.Any(u => u.UserName == "admin"))
             {
-                var admin = new ApplicationUser { UserName = "admin@andreea.com", Email = "admin@andreea.com" };
+                var admin = new ApplicationUser { UserName = "admin", Email = "admin@andreea.com" };
                 UserManager.Create(admin, "Test1!");
                 UserManager.AddToRole(admin.Id, "Admin");
             }
-            if (!context.Users.Any(u => u.UserName == "agent@andreea.com"))
+            if (!context.Users.Any(u => u.UserName == "agent"))
             {
-                var agent = new ApplicationUser { UserName = "agent@andreea.com", Email = "agent@andreea.com" };
+                var agent = new ApplicationUser { UserName = "agent", Email = "agent@andreea.com" };
                 UserManager.Create(agent, "Test1!");
                 UserManager.AddToRole(agent.Id, "agent");
             }
-            if (!context.Users.Any(u => u.UserName == "user@andreea.com"))
+            if (!context.Users.Any(u => u.UserName == "user"))
             {
-                var user = new ApplicationUser { UserName = "user@andreea.com", Email = "user@andreea.com" };
+                var user = new ApplicationUser { UserName = "user", Email = "user@andreea.com" };
 
                 UserManager.Create(user, "Test1!");
                 UserManager.AddToRole(user.Id, "user");

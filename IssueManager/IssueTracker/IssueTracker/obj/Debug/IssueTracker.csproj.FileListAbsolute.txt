@@ -96,3 +96,4 @@ E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.addAgentToModel.resources
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.csprojAssemblyReference.cache
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.changedModel.resources
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.changedEmailToUsername.resources
