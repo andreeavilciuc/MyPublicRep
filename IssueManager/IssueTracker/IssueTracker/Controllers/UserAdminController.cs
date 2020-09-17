@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace IssueTracker.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserAdminController : Controller
     {
         public UserAdminController()
@@ -36,7 +37,20 @@ namespace IssueTracker.Controllers
         // GET: /Users/
         public async Task<ActionResult> Index()
         {
-            return View(await UserManager.Users.ToListAsync());
+            var userList = await UserManager.Users.ToListAsync();
+            List<UserWithRole> usersWithRoles = new List<UserWithRole>();
+            foreach (var user in userList)
+            {
+                UserWithRole userWithRole = new UserWithRole();
+
+                userWithRole.UserId = user.Id;
+                userWithRole.EmailAdress = user.Email;
+                userWithRole.UserName = user.UserName;
+                userWithRole.Role = GetRoleForUser(user.Id);
+                usersWithRoles.Add(userWithRole);
+
+            }
+            return View(usersWithRoles);
         }
 
         //
@@ -48,16 +62,23 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var user = await UserManager.FindByIdAsync(id);
-            return View(user);
+            ViewBag.UserRole = GetRoleForUser(id);
+            UserWithRole userWithRole = new UserWithRole();
+            userWithRole.UserId = user.Id;
+            userWithRole.EmailAdress = user.Email;
+            userWithRole.UserName = user.UserName;
+            userWithRole.Role = GetRoleForUser(user.Id);
+            return View(userWithRole);
         }
 
         //
         // GET: /Users/Create
         public async Task<ActionResult> Create()
         {
+            var user = new RegisterViewModel();
             //Get the list of Roles
             ViewBag.RoleId = new SelectList(await RoleManager.Roles.ToListAsync(), "Id", "Name");
-            return View();
+            return View(user);
         }
 
         //
@@ -69,15 +90,13 @@ namespace IssueTracker.Controllers
             {
                 var user = new ApplicationUser();
                 user.UserName = userViewModel.UserName;
-                user.HomeTown = userViewModel.HomeTown;
+                user.Email = userViewModel.Email;
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
-                //Add User Admin to Role Admin
                 if (adminresult.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(RoleId))
                     {
-                        //Find Role Admin
                         var role = await RoleManager.FindByIdAsync(RoleId);
                         var result = await UserManager.AddToRoleAsync(user.Id, role.Name);
                         if (!result.Succeeded)
@@ -112,6 +131,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            ViewBag.CurrentRole = GetRoleForUser(id);
             ViewBag.RoleId = new SelectList(RoleManager.Roles, "Id", "Name");
 
             var user = await UserManager.FindByIdAsync(id);
@@ -126,7 +146,7 @@ namespace IssueTracker.Controllers
         // POST: /Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "UserName,Id,HomeTown")] ApplicationUser formuser, string id, string RoleId)
+        public async Task<ActionResult> Edit([Bind(Include = "UserName,Email")] ApplicationUser formuser, string id, string RoleId)
         {
             if (id == null)
             {
@@ -135,7 +155,6 @@ namespace IssueTracker.Controllers
             ViewBag.RoleId = new SelectList(RoleManager.Roles, "Id", "Name");
             var user = await UserManager.FindByIdAsync(id);
             user.UserName = formuser.UserName;
-            user.HomeTown = formuser.HomeTown;
             if (ModelState.IsValid)
             {
                 //Update the user details
@@ -228,5 +247,19 @@ namespace IssueTracker.Controllers
         //        return View();
         //    }
         //}
+        private string GetRoleForUser(string userId)
+        {
+            var role = UserManager.GetRoles(userId);
+            if (role.Count() != 0)
+            {
+                return role[0].ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+            //}
+        }
     }
 }
