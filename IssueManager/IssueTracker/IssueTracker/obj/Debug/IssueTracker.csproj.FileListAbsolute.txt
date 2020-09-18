@@ -97,3 +97,7 @@ E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.csprojAssemblyReference.cache
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.changedModel.resources
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.changedEmailToUsername.resources
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedList.dll
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedList.Mvc.dll
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedList.xml
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedList.Mvc.xml

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<IssueTracker.Models.Issue>
+﻿@model PagedList.IPagedList<IssueTracker.Models.Issue>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "All Issues";
@@ -10,29 +12,29 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("All", "Issue", FormMethod.Get))
 {
     <p>
-        Find by : @Html.TextBox("SearchString")
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Submit Date", "All", new { sortOrder = ViewBag.DateSortParm })
+            @Html.ActionLink("Submit Date", "All", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Priority)
+            Priority
         </th>
         <th>
-            @Html.ActionLink("Status", "All", new { sortOrder = ViewBag.StatusSortParm })
+            @Html.ActionLink("Status", "All", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Subject)
+            Subject
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Submitter.UserName)
+            Submitter
         </th>
         <th>
             Last modified by
@@ -74,3 +76,8 @@
     }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("All",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

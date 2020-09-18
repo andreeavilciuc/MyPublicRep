@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using IssueTracker.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using PagedList;
 
 namespace IssueTracker.Controllers
 {
@@ -23,11 +24,24 @@ namespace IssueTracker.Controllers
             manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
         // GET: My Issues
-        public ActionResult Index(string sortOrder, string searchString)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+
             var currentUser = manager.FindById(User.Identity.GetUserId());
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var issues = from issue in db.Issues
                          where issue.Submitter.Id == currentUser.Id
                          select issue;
@@ -53,14 +67,29 @@ namespace IssueTracker.Controllers
                     issues = issues.OrderBy(i => i.SubmitDate);
                     break;
             }
-            return View(issues.ToList());
+            int pageSize = 7;
+            int pageNumber = (page ?? 1);
+            return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult All(string sortOrder, string searchString)
+        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+            
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var issues = from issue in db.Issues
                          select issue;
             if (!String.IsNullOrEmpty(searchString))
@@ -85,14 +114,29 @@ namespace IssueTracker.Controllers
          issues = issues.OrderBy(i => i.SubmitDate);
          break;
    }
-            return View(issues.ToList());
+            int pageSize = 7;
+            int pageNumber = (page ?? 1);
+            return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult AllOpen(string sortOrder, string searchString)
+        public ActionResult AllOpen(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrioritySortParm = sortOrder == "Priority" ? "priority_desc" : "Priority";
+            
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var issues = from issue in db.Issues
                          where issue.Status == IssueStatus.open
                          select issue;
@@ -119,7 +163,9 @@ namespace IssueTracker.Controllers
                     issues = issues.OrderBy(i => i.SubmitDate);
                     break;
             }
-            return View(issues.ToList());
+            int pageSize = 7;
+            int pageNumber = (page ?? 1);
+            return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Issue/Details/5
