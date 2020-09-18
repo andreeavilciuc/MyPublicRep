@@ -23,7 +23,7 @@ namespace IssueTracker.Controllers
             manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
         // GET: My Issues
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string searchString)
         {
             var currentUser = manager.FindById(User.Identity.GetUserId());
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -31,6 +31,12 @@ namespace IssueTracker.Controllers
             var issues = from issue in db.Issues
                          where issue.Submitter.Id == currentUser.Id
                          select issue;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                issues = issues.Where(s => s.Subject.Contains(searchString)
+                                       || s.Content.Contains(searchString)
+                                       || s.Submitter.UserName.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -51,13 +57,19 @@ namespace IssueTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult All(string sortOrder)
+        public ActionResult All(string sortOrder, string searchString)
         {
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             var issues = from issue in db.Issues
                          select issue;
-            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                issues = issues.Where(s => s.Subject.Contains(searchString)
+                                       || s.Content.Contains(searchString)
+                                       || s.Submitter.UserName.Contains(searchString));
+            }
+
             switch (sortOrder)
    {
       case "date_desc":
@@ -77,14 +89,20 @@ namespace IssueTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult AllOpen(string sortOrder)
+        public ActionResult AllOpen(string sortOrder, string searchString)
         {
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrioritySortParm = sortOrder == "Priority" ? "priority_desc" : "Priority";
             var issues = from issue in db.Issues
                          where issue.Status == IssueStatus.open
                          select issue;
-                         
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                issues = issues.Where(s => s.Subject.Contains(searchString)
+                                       || s.Content.Contains(searchString)
+                                       || s.Submitter.UserName.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
