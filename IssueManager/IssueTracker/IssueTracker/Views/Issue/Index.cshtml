@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<IssueTracker.Models.Issue>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My Issues";
 }
 
-<h2>Index</h2>
+<h2>My Issues</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,13 +12,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SubmitDate)
+            @Html.ActionLink("Submit Date", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Priority)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Subject)

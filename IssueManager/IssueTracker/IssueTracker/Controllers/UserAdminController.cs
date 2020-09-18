@@ -202,7 +202,7 @@ namespace IssueTracker.Controllers
         //    {
         //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         //    }
-        //    var user = await context.Users.FindAsync(id);
+        //    var user = await UserManager.FindByIdAsync(id);
         //    if (user == null)
         //    {
         //        return HttpNotFound();
@@ -223,19 +223,19 @@ namespace IssueTracker.Controllers
         //            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         //        }
 
-        //        var user = await context.Users.FindAsync(id);
-        //        var logins = user.Logins;
-        //        foreach (var login in logins)
-        //        {
-        //            context.UserLogins.Remove(login);
-        //        }
-        //        var rolesForUser = await IdentityManager.Roles.GetRolesForUserAsync(id, CancellationToken.None);
+        //        var user = await UserManager.FindByIdAsync(id);
+        //        //var logins = user.Logins;
+        //        //foreach (var login in logins)
+        //        //{
+        //        //    UserManager.UserLogins.Remove(login);
+        //        //}
+        //        var rolesForUser = await UserManager.GetRolesAsync(id);
         //        if (rolesForUser.Count() > 0)
         //        {
 
         //            foreach (var item in rolesForUser)
         //            {
-        //                var result = await IdentityManager.Roles.RemoveUserFromRoleAsync(user.Id, item.Id, CancellationToken.None);
+        //                var result = await UserManager.RemoveFromRoleAsync(id, item); ;
         //            }
         //        }
         //        context.Users.Remove(user);

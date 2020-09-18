@@ -301,7 +301,6 @@
     <Content Include="Views\Issue\All.cshtml" />
     <Content Include="Views\Issue\AllOpen.cshtml" />
     <Content Include="Views\UserAdmin\Create.cshtml" />
-    <Content Include="Views\UserAdmin\Delete.cshtml" />
     <Content Include="Views\UserAdmin\Details.cshtml" />
     <Content Include="Views\UserAdmin\Edit.cshtml" />
     <Content Include="Views\UserAdmin\Index.cshtml" />

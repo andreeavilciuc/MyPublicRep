@@ -22,23 +22,86 @@ namespace IssueTracker.Controllers
             db = new MyDbContext();
             manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
-        // GET: Issue
-        public ActionResult Index()
+        // GET: My Issues
+        public ActionResult Index(string sortOrder)
         {
             var currentUser = manager.FindById(User.Identity.GetUserId());
-            return View(db.Issues.ToList().Where(issue => issue.Submitter.Id == currentUser.Id));
-        }
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+            var issues = from issue in db.Issues
+                         where issue.Submitter.Id == currentUser.Id
+                         select issue;
 
-        [Authorize(Roles = "Admin")]
-        public ActionResult All()
-        {
-            return View(db.Issues.ToList());
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    issues = issues.OrderByDescending(i => i.SubmitDate);
+                    break;
+                case "Status":
+                    issues = issues.OrderBy(i => i.Status);
+                    break;
+                case "status_desc":
+                    issues = issues.OrderByDescending(i => i.Status);
+                    break;
+                default:
+                    issues = issues.OrderBy(i => i.SubmitDate);
+                    break;
+            }
+            return View(issues.ToList());
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult AllOpen()
+        public ActionResult All(string sortOrder)
         {
-            return View(db.Issues.ToList().Where(issue => issue.Status == IssueStatus.open));
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+            var issues = from issue in db.Issues
+                         select issue;
+            
+            switch (sortOrder)
+   {
+      case "date_desc":
+         issues = issues.OrderByDescending(i => i.SubmitDate);
+         break;
+      case "Status":
+         issues = issues.OrderBy(i => i.Status);
+         break;
+      case "status_desc":
+         issues = issues.OrderByDescending(i => i.Status);
+         break;
+      default:
+         issues = issues.OrderBy(i => i.SubmitDate);
+         break;
+   }
+            return View(issues.ToList());
+        }
+
+        [Authorize(Roles = "Admin, Agent")]
+        public ActionResult AllOpen(string sortOrder)
+        {
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.PrioritySortParm = sortOrder == "Priority" ? "priority_desc" : "Priority";
+            var issues = from issue in db.Issues
+                         where issue.Status == IssueStatus.open
+                         select issue;
+                         
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    issues = issues.OrderByDescending(i => i.SubmitDate);
+                    break;
+                case "Priority":
+                    issues = issues.OrderBy(i => i.Priority);
+                    break;
+                case "priority_desc":
+                    issues = issues.OrderByDescending(i => i.Priority);
+                    break;
+                default:
+                    issues = issues.OrderBy(i => i.SubmitDate);
+                    break;
+            }
+            return View(issues.ToList());
         }
 
         // GET: Issue/Details/5

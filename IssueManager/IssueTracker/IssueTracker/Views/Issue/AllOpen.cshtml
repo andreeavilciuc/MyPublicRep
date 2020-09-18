@@ -12,10 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SubmitDate)
+            @Html.ActionLink("Submit Date", "AllOpen", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Priority)
+            @Html.ActionLink("Priority", "AllOpen", new { sortOrder = ViewBag.PrioritySortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Status)
