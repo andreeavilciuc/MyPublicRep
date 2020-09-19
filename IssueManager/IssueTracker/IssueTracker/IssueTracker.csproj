@@ -232,6 +232,10 @@
     <Compile Include="Migrations\202009110837200_changedEmailToUsername.designer.cs">
       <DependentUpon>202009110837200_changedEmailToUsername.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009190828220_addCommentModel.cs" />
+    <Compile Include="Migrations\202009190828220_addCommentModel.designer.cs">
+      <DependentUpon>202009190828220_addCommentModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
@@ -355,6 +359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009110837200_changedEmailToUsername.resx">
       <DependentUpon>202009110837200_changedEmailToUsername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009190828220_addCommentModel.resx">
+      <DependentUpon>202009190828220_addCommentModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

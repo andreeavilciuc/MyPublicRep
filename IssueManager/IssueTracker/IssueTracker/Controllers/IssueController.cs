@@ -248,7 +248,7 @@ namespace IssueTracker.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id)
+        public ActionResult EditPost(int? id, string addComment)
         {
             var currentUserID = User.Identity.GetUserId();
             var currentUser = manager.FindById(currentUserID);
@@ -268,13 +268,21 @@ namespace IssueTracker.Controllers
             }
 
             issueToUpdate.LastModifiedBy = currentUser;
+            
 
             if (TryUpdateModel(issueToUpdate, ""))
             {
                 try
                 {
+                    
+                    var comment = new Comment();
+                    comment.Date = DateTime.Now;
+                    comment.Description = addComment;
+                    comment.IssueID = issueToUpdate.ID;
+                    comment.Submitter = currentUser;
+                    db.Comments.Add(comment);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Edit");
                 }
                 catch (Exception ex)
                 {

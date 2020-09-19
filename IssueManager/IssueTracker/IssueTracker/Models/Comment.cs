@@ -19,6 +19,7 @@ namespace IssueTracker.Models
 
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Date { get; set; }
+        public virtual ApplicationUser Submitter { get; set; }
 
         public virtual Issue Issue { get; set; }
     }

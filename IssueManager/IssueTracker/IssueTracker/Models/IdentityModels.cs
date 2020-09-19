@@ -34,6 +34,8 @@ namespace IssueTracker.Models
         }
 
         public System.Data.Entity.DbSet<IssueTracker.Models.Issue> Issues { get; set; }
+        public System.Data.Entity.DbSet<IssueTracker.Models.Comment> Comments { get; set; }
+
 
         //public System.Data.Entity.DbSet<IssueTracker.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
