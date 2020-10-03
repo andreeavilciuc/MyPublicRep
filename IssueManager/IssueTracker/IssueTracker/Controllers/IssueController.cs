@@ -23,6 +23,8 @@ namespace IssueTracker.Controllers
             db = new MyDbContext();
             manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
+
+       
         // GET: My Issues
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -73,12 +75,13 @@ namespace IssueTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? selectedItem, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
-            
+            ViewBag.CurrentFilter = searchString;
+
             if (searchString != null)
             {
                 page = 1;
@@ -88,7 +91,7 @@ namespace IssueTracker.Controllers
                 searchString = currentFilter;
             }
 
-            ViewBag.CurrentFilter = searchString;
+            
 
             var issues = from issue in db.Issues
                          select issue;
@@ -98,7 +101,7 @@ namespace IssueTracker.Controllers
                                        || s.Content.Contains(searchString)
                                        || s.Submitter.UserName.Contains(searchString));
             }
-
+            
             switch (sortOrder)
    {
       case "date_desc":
@@ -114,8 +117,19 @@ namespace IssueTracker.Controllers
          issues = issues.OrderBy(i => i.SubmitDate);
          break;
    }
-            int pageSize = 7;
+            if (selectedItem == null)
+            {
+                selectedItem = issues.ToList()[0].ID;
+            }
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
+
+            if (selectedItem == null)
+            {
+                selectedItem = issues.First().ID;
+            }
+            ViewBag.SelectedItem = selectedItem;
+
             return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
@@ -147,6 +161,7 @@ namespace IssueTracker.Controllers
                                        || s.Content.Contains(searchString)
                                        || s.Submitter.UserName.Contains(searchString));
             }
+            
 
             switch (sortOrder)
             {
@@ -190,6 +205,29 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
             return View(issue);
+        }
+        [ChildActionOnly]
+        public ActionResult IssueDetails(int? id)
+        {
+            var currentUserID = User.Identity.GetUserId();
+            var userStore = new UserStore<ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Issue issue = db.Issues.Find(id);
+
+            if (issue == null)
+            {
+                return HttpNotFound();
+            }
+            if (issue.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID, "User"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+            return PartialView("IssueDetails", issue);
         }
 
         // GET: Issue/Create

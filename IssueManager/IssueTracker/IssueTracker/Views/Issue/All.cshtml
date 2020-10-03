@@ -22,6 +22,9 @@
 <table class="table">
     <tr>
         <th>
+            Issue Number
+        </th>
+        <th>
             @Html.ActionLink("Submit Date", "All", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
@@ -44,40 +47,47 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubmitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Submitter.UserName)
-            </td>
-            <td>
-                @if (item.LastModifiedBy != null)
-                {
-                    @Html.DisplayFor(modelItem => item.LastModifiedBy.UserName)
-                }
-            </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ID)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SubmitDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Priority)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Subject)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Submitter.UserName)
+    </td>
+    <td>
+        @if (item.LastModifiedBy != null)
+        {
+            @Html.DisplayFor(modelItem => item.LastModifiedBy.UserName)
+        }
+    </td>
 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+        @Html.ActionLink("Details", "All", new { selectedItem = item.ID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+    </td>
+</tr>
     }
 
 </table>
-<br />
+
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("All",
     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@{
+    Html.RenderAction("IssueDetails", "Issue", new { id = ViewBag.SelectedItem});
+}
