@@ -24,7 +24,6 @@ namespace IssueTracker.Controllers
             manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
-       
         // GET: My Issues
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -33,26 +32,69 @@ namespace IssueTracker.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+
             if (searchString != null)
             {
                 page = 1;
             }
             else
             {
-                searchString = currentFilter;
+                searchString = String.IsNullOrEmpty(currentFilter) ? "" : currentFilter;
             }
-
             ViewBag.CurrentFilter = searchString;
 
             var issues = from issue in db.Issues
-                         where issue.Submitter.Id == currentUser.Id
+                         where issue.Submitter.Id == currentUser.Id && 
+                         (issue.ID.ToString().Contains(searchString)
+                         || issue.Subject.Contains(searchString)
+                         || issue.Content.Contains(searchString)
+                         || issue.Submitter.UserName.Contains(searchString))
                          select issue;
-            if (!String.IsNullOrEmpty(searchString))
+            
+            switch (sortOrder)
             {
-                issues = issues.Where(s => s.Subject.Contains(searchString)
-                                       || s.Content.Contains(searchString)
-                                       || s.Submitter.UserName.Contains(searchString));
+                case "date_desc":
+                    issues = issues.OrderByDescending(i => i.SubmitDate);
+                    break;
+                case "Status":
+                    issues = issues.OrderBy(i => i.Status);
+                    break;
+                case "status_desc":
+                    issues = issues.OrderByDescending(i => i.Status);
+                    break;
+                default:
+                    issues = issues.OrderBy(i => i.SubmitDate);
+                    break;
             }
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+            return View(issues.ToPagedList(pageNumber, pageSize));
+        }
+
+        [Authorize(Roles = "Admin, Agent")]
+        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? selectedItem, int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
+            ViewBag.SelectedItem = selectedItem;
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = String.IsNullOrEmpty(currentFilter) ? "" : currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+
+            var issues = from issue in db.Issues
+                         where issue.ID.ToString().Contains(searchString) 
+                         || issue.Subject.Contains(searchString)
+                         || issue.Content.Contains(searchString)
+                         || issue.Submitter.UserName.Contains(searchString)
+                         select issue;
 
             switch (sortOrder)
             {
@@ -69,66 +111,9 @@ namespace IssueTracker.Controllers
                     issues = issues.OrderBy(i => i.SubmitDate);
                     break;
             }
-            int pageSize = 7;
-            int pageNumber = (page ?? 1);
-            return View(issues.ToPagedList(pageNumber, pageSize));
-        }
-
-        [Authorize(Roles = "Admin, Agent")]
-        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? selectedItem, int? page)
-        {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-            ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
-            ViewBag.CurrentFilter = searchString;
-
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            
-
-            var issues = from issue in db.Issues
-                         select issue;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                issues = issues.Where(s => s.Subject.Contains(searchString)
-                                       || s.Content.Contains(searchString)
-                                       || s.Submitter.UserName.Contains(searchString));
-            }
-            
-            switch (sortOrder)
-   {
-      case "date_desc":
-         issues = issues.OrderByDescending(i => i.SubmitDate);
-         break;
-      case "Status":
-         issues = issues.OrderBy(i => i.Status);
-         break;
-      case "status_desc":
-         issues = issues.OrderByDescending(i => i.Status);
-         break;
-      default:
-         issues = issues.OrderBy(i => i.SubmitDate);
-         break;
-   }
-            if (selectedItem == null)
-            {
-                selectedItem = issues.ToList()[0].ID;
-            }
+                        
             int pageSize = 4;
-            int pageNumber = (page ?? 1);
-
-            if (selectedItem == null)
-            {
-                selectedItem = issues.First().ID;
-            }
-            ViewBag.SelectedItem = selectedItem;
+            int pageNumber = (page ?? 1);            
 
             return View(issues.ToPagedList(pageNumber, pageSize));
         }
@@ -139,29 +124,23 @@ namespace IssueTracker.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrioritySortParm = sortOrder == "Priority" ? "priority_desc" : "Priority";
-            
+
             if (searchString != null)
             {
                 page = 1;
             }
             else
             {
-                searchString = currentFilter;
+                searchString = String.IsNullOrEmpty(currentFilter) ? "" : currentFilter;
             }
-
             ViewBag.CurrentFilter = searchString;
 
             var issues = from issue in db.Issues
-                         where issue.Status == IssueStatus.open
+                         where issue.Status == IssueStatus.open && (issue.ID.ToString().Contains(searchString)
+                         || issue.Subject.Contains(searchString)
+                         || issue.Content.Contains(searchString)
+                         || issue.Submitter.UserName.Contains(searchString))
                          select issue;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                issues = issues.Where(s => s.Subject.Contains(searchString)
-                                       || s.Content.Contains(searchString)
-                                       || s.Submitter.UserName.Contains(searchString));
-            }
-            
 
             switch (sortOrder)
             {
@@ -178,7 +157,7 @@ namespace IssueTracker.Controllers
                     issues = issues.OrderBy(i => i.SubmitDate);
                     break;
             }
-            int pageSize = 7;
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
             return View(issues.ToPagedList(pageNumber, pageSize));
         }
@@ -230,16 +209,11 @@ namespace IssueTracker.Controllers
             return PartialView("IssueDetails", issue);
         }
 
-        // GET: Issue/Create
         public ActionResult Create()
         {
             var issueModel = new Issue();
             return View(issueModel);
         }
-
-        // POST: Issue/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -306,13 +280,11 @@ namespace IssueTracker.Controllers
             }
 
             issueToUpdate.LastModifiedBy = currentUser;
-            
 
             if (TryUpdateModel(issueToUpdate, ""))
             {
                 try
                 {
-                    
                     var comment = new Comment();
                     comment.Date = DateTime.Now;
                     comment.Description = addComment;
