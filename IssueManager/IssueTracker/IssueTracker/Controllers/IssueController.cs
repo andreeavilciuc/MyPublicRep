@@ -72,12 +72,11 @@ namespace IssueTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Agent")]
-        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? selectedItem, int? page)
+        public ActionResult All(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
-            ViewBag.SelectedItem = selectedItem;
 
             if (searchString != null)
             {
@@ -162,7 +161,6 @@ namespace IssueTracker.Controllers
             return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Issue/Details/5
         public ActionResult Details(int? id)
         {
             var currentUserID = User.Identity.GetUserId();
@@ -183,30 +181,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
-            return View(issue);
-        }
-        [ChildActionOnly]
-        public ActionResult IssueDetails(int? id)
-        {
-            var currentUserID = User.Identity.GetUserId();
-            var userStore = new UserStore<ApplicationUser>(db);
-            var userManager = new UserManager<ApplicationUser>(userStore);
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Issue issue = db.Issues.Find(id);
-
-            if (issue == null)
-            {
-                return HttpNotFound();
-            }
-            if (issue.Submitter.Id != currentUserID && userManager.IsInRole(currentUserID, "User"))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-            return PartialView("IssueDetails", issue);
+            return PartialView("_Details", issue);
         }
 
         public ActionResult Create()

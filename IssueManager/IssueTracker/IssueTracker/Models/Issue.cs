@@ -20,10 +20,13 @@ public enum IssuePriority
 }
     public class Issue
     {
+        [Display(Name = "Issue Number")]
         public int ID { get; set; }
         private DateTime _date = DateTime.Now;
 
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        [Display(Name = "Submit Date")]
+
         public DateTime SubmitDate { get { return _date; }  set { _date = value; } }
 
         public IssuePriority Priority { get; set; }

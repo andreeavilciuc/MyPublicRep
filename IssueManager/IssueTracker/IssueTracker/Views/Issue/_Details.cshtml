@@ -1,0 +1,93 @@
+﻿@model IssueTracker.Models.Issue
+
+    <div>
+        <h4>Details</h4>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SubmitDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SubmitDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Priority)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Priority)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Subject)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Subject)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Content)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Content)
+            </dd>
+            <dt>
+                @Html.DisplayName("Submitter")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Submitter.UserName)
+            </dd>
+
+        </dl>
+        @if (Model.Comments.Count > 0)
+        {
+        <table class="table">
+            <caption>Comments</caption>
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Submitter
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model.Comments)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Submitter.UserName)
+                    </td>
+                </tr>
+            }
+
+        </table>
+        }
+    </div>

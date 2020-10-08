@@ -14,7 +14,7 @@ namespace IssueTracker.Models
         [ForeignKey ("Issue")]
         public int IssueID { get; set; }
 
-        [StringLength(100)]
+        [StringLength(200)]
         public string Description { get; set; }
 
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]

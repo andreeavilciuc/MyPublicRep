@@ -102,3 +102,4 @@ E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedL
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\bin\PagedList.Mvc.xml
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.addCommentModel.resources
 E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.csprojAssemblyReference.cache
+E:\Programming\git\MyPublicRep\IssueManager\IssueTracker\IssueTracker\obj\Debug\IssueTracker.Migrations.updateCommentLength.resources

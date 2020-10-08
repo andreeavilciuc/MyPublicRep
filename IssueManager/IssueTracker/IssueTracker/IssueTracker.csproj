@@ -236,6 +236,10 @@
     <Compile Include="Migrations\202009190828220_addCommentModel.designer.cs">
       <DependentUpon>202009190828220_addCommentModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010081135464_updateCommentLength.cs" />
+    <Compile Include="Migrations\202010081135464_updateCommentLength.designer.cs">
+      <DependentUpon>202010081135464_updateCommentLength.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
@@ -265,6 +269,8 @@
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -315,8 +321,7 @@
     <Content Include="Views\UserAdmin\Details.cshtml" />
     <Content Include="Views\UserAdmin\Edit.cshtml" />
     <Content Include="Views\UserAdmin\Index.cshtml" />
-    <Content Include="Views\Shared\_DetailsPartialView.cshtml" />
-    <Content Include="Views\Issue\IssueDetails.cshtml" />
+    <Content Include="Views\Issue\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -364,6 +369,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009190828220_addCommentModel.resx">
       <DependentUpon>202009190828220_addCommentModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010081135464_updateCommentLength.resx">
+      <DependentUpon>202010081135464_updateCommentLength.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
